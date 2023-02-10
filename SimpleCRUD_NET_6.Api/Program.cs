@@ -37,6 +37,8 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<ICalculateAgeService, CalculateAgeService>();
+builder.Services.AddScoped<ApiContext>();
+
 
 builder.Services.AddFluentValidation(conf =>
 {
@@ -79,20 +81,25 @@ void AddUsers()
             {
                 Username = "Joydip",
                 Name = "Kanjilal",
-                
-            },
+                PhoneNumber = 123,
+                CountryCode = "+60",
+                BirthDate = new DateTime(2000, 09, 24),
+                IsActive = true
+    },
             new User
             {
                 Username ="Yashavanth",
                 Name ="Kanetkar",
-                
+                PhoneNumber = 1234,
+                CountryCode = "+60",
+                BirthDate = new DateTime(2005, 10, 11),
+                IsActive = false
             }
         };
         context.Users.AddRange(users);
         context.SaveChanges();
     }
 }
-
 
 app.Run();
 

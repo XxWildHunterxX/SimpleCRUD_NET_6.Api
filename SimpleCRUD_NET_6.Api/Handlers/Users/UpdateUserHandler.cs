@@ -4,78 +4,88 @@ using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using SimpleCRUD_NET_6.Api.Domains;
+using SimpleCRUD_NET_6.Api.EFCoreInMemoryDbDemo;
 
 namespace SimpleCRUD.Api.Handlers.Users
 {
     public class UpdateUserRequest : IRequest<UpdateUserResponse>
     {
         public long Id { get; set; }
-        public string Username { get; set; }
+        public string? Username { get; set; }
         public string Name { get; set; }
-        public UserType? UserType { get; set; }
-
-        public string StreamRole { get; set; }
-        public string PhoneNumber { get; set; }
+        public int PhoneNumber { get; set; }
         public string CountryCode { get; set; }
+        public DateTime BirthDate { get; set; }
     }
 
     public class UpdateUserResponse
-    { 
+    {
     }
 
     public class UpdateUserValidator : AbstractValidator<UpdateUserRequest>
     {
-        
-        public UpdateUserValidator()
+        private readonly ApiContext _apiContext;
+        public UpdateUserValidator(ApiContext apiContext)
         {
-            
+            _apiContext = apiContext;
+
             CascadeMode = CascadeMode.Stop;
 
-            RuleFor(x => x.UserType)
+            RuleFor(x => x.BirthDate)
+                .Must(BeAValidAge)
+                .WithMessage("Your Birth Date Cannot more than Current Date")
                 .NotEmpty()
-                .WithMessage("User Type cannot be empty") ;
+                .WithMessage("Birth Date cannot be empty");
+
+            RuleFor(x => x.Name)
+                .NotEmpty()
+                .WithMessage("Name cannot be empty");
 
             RuleFor(x => x.PhoneNumber)
                 .NotEmpty()
-                .WithMessage("Phone Number cannot be empty")
-                .Must(PhoneNumberExists)
-                .WithMessage("Phone Number is used. Please use other Phone Number");
-
-            RuleFor(x => x.CountryCode)
-                .NotEmpty()
-                .WithMessage("Country Code cannot be empty");
-
-
+                .WithMessage("Phone Number cannot be empty");
         }
 
-        private bool PhoneNumberExists(UpdateUserRequest request, string username)
+        
+        private bool BeAValidAge(DateTime date)
         {
-            if (string.IsNullOrEmpty(request.PhoneNumber)) return true;
+            int currentYear = DateTime.Now.Year;
+            int dobYear = date.Year;
 
-            var existsCount = 0;
+            if (dobYear < currentYear && dobYear > (currentYear - 120))
+            {
+                return true;
+            }
 
-            return existsCount == 0;
+            return false;
         }
 
     }
 
     public class UpdateUserHandler : IRequestHandler<UpdateUserRequest, UpdateUserResponse>
     {
+        private readonly ApiContext _apiContext;
 
-        
-        public UpdateUserHandler()
+        public UpdateUserHandler(ApiContext apiContext)
         {
-           
+            _apiContext = apiContext;
         }
 
-        public async Task<UpdateUserResponse> Handle(UpdateUserRequest request,
-            CancellationToken cancellationToken)
-        { 
-  
-            return await Task.FromResult(new UpdateUserResponse
-            { 
-            });
+        public async Task<UpdateUserResponse> Handle(UpdateUserRequest request,CancellationToken cancellationToken)
+        {
+
+            var user = _apiContext.Users.Where(u => u.Id == request.Id).FirstOrDefault();
+
+            user.Name = request.Name;
+            user.BirthDate = request.BirthDate;
+            user.PhoneNumber = request.PhoneNumber;
+            user.CountryCode = request.CountryCode;
+
+
+            _apiContext.SaveChanges();
+
+            return await Task.FromResult(new UpdateUserResponse());
         }
-        
+
     }
 }

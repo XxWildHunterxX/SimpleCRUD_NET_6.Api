@@ -24,19 +24,14 @@ namespace SimpleCRUD_NET_6.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateUserRequest request)
         {
-
             var result = await _mediator.Send(request);
-
-            return Ok(result);
-
+            return Ok();
         }
 
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] GetUserRequest request)
         {
-
             var result = await _mediator.Send(request);
-
             return Ok(result);
 
         }
@@ -44,9 +39,7 @@ namespace SimpleCRUD_NET_6.Api.Controllers
         [HttpPost("queryUsers")]
         public async Task<IActionResult> QueryUsers([FromBody] QueryUsersRequest request)
         {
-
             var result = await _mediator.Send(request);
-
             return Ok(result);
 
         }
@@ -54,22 +47,25 @@ namespace SimpleCRUD_NET_6.Api.Controllers
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] UpdateUserRequest request)
         {
-
             var result = await _mediator.Send(request);
-
-            return Ok(result);
+            return Ok();
 
         }
 
-        [HttpPost("delete")]
-        public async Task<IActionResult> Delete([FromBody] DeleteUserRequest request)
+        [HttpPost("deactivate")]
+        public async Task<IActionResult> Delete([FromBody] DeactivateUserRequest request)
         {
-
             var result = await _mediator.Send(request);
-
-            return Ok(result);
+            return Ok();
 
         }
 
+        [HttpPost("recover")]
+        public async Task<IActionResult> Recover([FromBody] RecoverUserRequest request)
+        {
+            var result = await _mediator.Send(request);
+            return Ok();
+
+        }
     }
 }
