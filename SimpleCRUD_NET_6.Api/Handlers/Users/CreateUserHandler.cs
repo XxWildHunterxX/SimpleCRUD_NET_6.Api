@@ -14,7 +14,7 @@ namespace SimpleCRUD_NET_6.Api.Handlers.Users
     {
         public string? Username { get; set; }
         public string Name { get; set; }
-        public int PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
         public string CountryCode { get; set; }
         public DateTime BirthDate { get; set; }
     }
@@ -55,7 +55,9 @@ namespace SimpleCRUD_NET_6.Api.Handlers.Users
 
             RuleFor(x => x.PhoneNumber)
                 .NotEmpty()
-                .WithMessage("Phone Number cannot be empty");
+                .WithMessage("Phone Number cannot be empty")
+                .Matches(@"^[0-9]*$")
+                .WithMessage("Only Numbers are allowed");
 
         }
 

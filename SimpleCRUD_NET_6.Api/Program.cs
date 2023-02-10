@@ -81,7 +81,7 @@ void AddUsers()
             {
                 Username = "Joydip",
                 Name = "Kanjilal",
-                PhoneNumber = 123,
+                PhoneNumber = "123",
                 CountryCode = "+60",
                 BirthDate = new DateTime(2000, 09, 24),
                 IsActive = true
@@ -90,7 +90,7 @@ void AddUsers()
             {
                 Username ="Yashavanth",
                 Name ="Kanetkar",
-                PhoneNumber = 1234,
+                PhoneNumber = "1234",
                 CountryCode = "+60",
                 BirthDate = new DateTime(2005, 10, 11),
                 IsActive = false

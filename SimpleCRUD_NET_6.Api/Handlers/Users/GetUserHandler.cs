@@ -18,7 +18,7 @@ namespace SimpleCRUD_NET_6.Api.Handlers.Users
         public long Id { get; set; }
         public string Username { get; set; }
         public string Name { get; set; }
-        public int? PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
         public string CountryCode { get; set; }
         public bool IsActive { get; set; }
         public DateTime BirthDate { get; set; }
